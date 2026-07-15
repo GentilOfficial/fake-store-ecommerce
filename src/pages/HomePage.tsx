@@ -1,6 +1,7 @@
-import ProductsLoadingState from '@/components/products/ProductsLoadingState'
+import ProductsLoadingState from '@/components/products/loading/ProductsLoadingState'
 import ProductsView from '@/components/products/ProductsView'
 import useProducts from '@/hooks/useProducts'
+import AppLayout from '@/layouts/AppLayout'
 import { useParams } from 'react-router-dom'
 
 const HomePage = () => {
@@ -8,11 +9,11 @@ const HomePage = () => {
   const { products, isLoading, error } = useProducts(category)
 
   return (
-    <main className="mx-auto flex-1 max-w-6xl px-4 py-8">
+    <AppLayout>
       {isLoading && <ProductsLoadingState />}
       {error && <p>{error}</p>}
       {!isLoading && !error && <ProductsView products={products} />}
-    </main>
+    </AppLayout>
   )
 }
 

@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { cn } from '@/lib/utils'
 import type { Product } from '@/types/product'
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const CURRENCY: string = 'EUR'
 
@@ -77,7 +78,9 @@ const ProductItem = ({ product, index }: { product: Product; index: number }) =>
           <p className="text-lg font-semibold">
             {CURRENCY} {product.price.toFixed(2)}
           </p>
-          <Button type="button">View Product</Button>
+          <Button asChild>
+            <Link to={`/product/${product.id}`}>View Product</Link>
+          </Button>
         </CardFooter>
       </Card>
     </article>
