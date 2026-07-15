@@ -42,10 +42,10 @@ describe('getProducts', () => {
   })
 
   it('throws an error if the response is not ok', async () => {
-    globalThis.fetch = vi.fn().mockResolvedValue({ ok: false }) as any
+    globalThis.fetch = vi.fn().mockResolvedValue({ ok: false, status: 500, statusText: 'Internal Server Error' }) as any
 
     const request = getProducts()
 
-    await expect(request).rejects.toThrow('Network error')
+    await expect(request).rejects.toThrow('Internal Server Error')
   })
 })
