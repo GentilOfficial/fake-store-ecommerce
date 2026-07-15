@@ -1,3 +1,4 @@
+import { emitNetworkError } from '@/lib/network-error'
 import type { Product } from '@/types/product'
 
 const request = async (url: string, method: string = 'GET', body?: any): Promise<any> => {
@@ -12,13 +13,18 @@ const request = async (url: string, method: string = 'GET', body?: any): Promise
     config.body = JSON.stringify(body)
   }
 
-  const response = await fetch(`https://fakestoreapi.com${url}`, config)
+  try {
+    const response = await fetch(`https://fakestoreapi.com${url}`, config)
 
-  if (!response.ok) {
-    throw new Error(`HTTP error, status: ${response.status}`)
+    if (!response.ok) {
+      throw new Error('Network error')
+    }
+
+    return await response.json()
+  } catch (error) {
+    emitNetworkError('Network error')
+    throw error
   }
-
-  return await response.json()
 }
 
 export const getCategories = async (): Promise<string[]> => await request('/products/categories')
