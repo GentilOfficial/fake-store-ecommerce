@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/navigation-menu'
 import { Spinner } from '@/components/ui/spinner'
 import { cn } from '@/lib/utils'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 type NavLinkListProps = {
   categories: string[]
@@ -18,15 +18,9 @@ type NavLinkListProps = {
 }
 
 const NavLinkList = ({ categories, isLoading, error, listClassName, onSelect }: NavLinkListProps) => {
-  const navigate = useNavigate()
   const location = useLocation()
 
   const isRoot = location.pathname === '/'
-
-  const handleNavigate = (to: string) => {
-    navigate(to)
-    onSelect?.()
-  }
 
   if (isLoading) return <Spinner className="mx-auto" />
 
@@ -37,13 +31,10 @@ const NavLinkList = ({ categories, isLoading, error, listClassName, onSelect }: 
       <NavigationMenuList className={cn('gap-2', listClassName)}>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
-            <Button
-              type="button"
-              variant={isRoot ? 'secondary' : 'link'}
-              className="font-medium whitespace-nowrap"
-              onClick={() => handleNavigate('/')}
-            >
-              All
+            <Button asChild variant={isRoot ? 'secondary' : 'link'} className="font-medium whitespace-nowrap">
+              <Link to="/" onClick={onSelect}>
+                All
+              </Link>
             </Button>
           </NavigationMenuLink>
         </NavigationMenuItem>
@@ -51,12 +42,13 @@ const NavLinkList = ({ categories, isLoading, error, listClassName, onSelect }: 
           <NavigationMenuItem key={`category-${category}-${i}`}>
             <NavigationMenuLink asChild>
               <Button
-                type="button"
+                asChild
                 variant={location.pathname === `/category/${encodeURIComponent(category)}` ? 'secondary' : 'link'}
                 className="capitalize whitespace-nowrap"
-                onClick={() => handleNavigate(`/category/${encodeURIComponent(category)}`)}
               >
-                {category}
+                <Link to={`/category/${encodeURIComponent(category)}`} onClick={onSelect}>
+                  {category}
+                </Link>
               </Button>
             </NavigationMenuLink>
           </NavigationMenuItem>
