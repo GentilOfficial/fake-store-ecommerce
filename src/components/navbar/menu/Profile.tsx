@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { ShoppingCart } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-const Profile = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
+const Profile = ({ isAuthenticated, handleLogout }: { isAuthenticated: boolean; handleLogout: () => void }) => {
   if (!isAuthenticated) {
     return (
       <Button asChild>
@@ -22,8 +22,8 @@ const Profile = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
         )}
         <ShoppingCart className="size-6" />
       </div>
-      <Button asChild variant="destructive">
-        <Link to="/logout">Logout</Link>
+      <Button variant="destructive" onClick={handleLogout}>
+        Logout
       </Button>
     </div>
   )
