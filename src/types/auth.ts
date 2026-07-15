@@ -4,4 +4,5 @@ export interface AuthContextType {
   login: (username: string, password: string) => Promise<void>
   logout: () => void
   error: string | null
+  isLoading: boolean
 }
