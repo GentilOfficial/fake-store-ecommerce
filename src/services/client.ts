@@ -17,12 +17,19 @@ const request = async (url: string, method: string = 'GET', body?: any): Promise
     const response = await fetch(`https://fakestoreapi.com${url}`, config)
 
     if (!response.ok) {
-      throw new Error('Network error')
+      const error = {
+        status: response.status,
+        message: response.statusText,
+      }
+      throw error
     }
 
     return await response.json()
-  } catch (error) {
-    emitNetworkError('Network error')
+  } catch (error: any) {
+    if (error.status === undefined) {
+      emitNetworkError('Network error')
+    }
+
     throw error
   }
 }
@@ -35,3 +42,7 @@ export const getProducts = async (category?: string): Promise<Product[]> => {
   return await request('/products')
 }
 export const getProductById = async (productId: number): Promise<Product> => await request(`/products/${productId}`)
+export const login = async (username: string, password: string): Promise<any> => {
+  const body = { username, password }
+  return await request('/auth/login', 'POST', body)
+}

@@ -1,4 +1,5 @@
 import GlobalNetworkErrorProvider from '@/components/provider/GlobalNetworkErrorProvider.tsx'
+import AuthProvider from '@/providers/AuthProvider.tsx'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
@@ -9,7 +10,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <GlobalNetworkErrorProvider>
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </GlobalNetworkErrorProvider>
     </BrowserRouter>
   </StrictMode>,
