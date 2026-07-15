@@ -1,6 +1,7 @@
 import Footer from '@/components/footer/Footer'
 import Navbar from '@/components/navbar/Navbar'
 import HomePage from '@/pages/HomePage'
+import ProductPage from '@/pages/ProductPage'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/category/:category" element={<HomePage />} />
+        <Route path="/product/:productId" element={<ProductPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Footer />
