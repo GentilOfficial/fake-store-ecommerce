@@ -28,3 +28,4 @@ export const getProducts = async (category?: string): Promise<Product[]> => {
   }
   return await request('/products')
 }
+export const getProductById = async (productId: number): Promise<Product> => await request(`/products/${productId}`)
