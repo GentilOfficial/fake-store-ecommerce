@@ -1,10 +1,13 @@
 import NavLinkList from '@/components/navbar/menu/NavLinkList'
+import Profile from '@/components/navbar/menu/Profile'
 import { Button } from '@/components/ui/button'
+import { useAuth } from '@/context/AuthContext'
 import useCategories from '@/hooks/useCategories'
 import { Menu, X } from 'lucide-react'
 import { useState } from 'react'
 
 const Navbar = () => {
+  const { isAuthenticated } = useAuth()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { categories, isLoading, error } = useCategories()
 
@@ -19,9 +22,12 @@ const Navbar = () => {
   return (
     <header className="relative border-b border-border px-4 py-3 md:px-6">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3">
-        <h1 className="text-xl font-bold md:text-2xl">Fake Store | E-Commerce</h1>
-        <div className="hidden md:block">
+        <h1 className="text-xl font-bold md:text-2xl">Fake Store</h1>
+        <div className="hidden md:block mx-auto">
           <NavLinkList categories={categories} isLoading={isLoading} error={error} />
+        </div>
+        <div className="ms-auto">
+          <Profile isAuthenticated={isAuthenticated} />
         </div>
         <Button
           type="button"
