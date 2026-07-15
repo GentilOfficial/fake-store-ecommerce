@@ -22,6 +22,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       setToken(data.token)
       localStorage.setItem(LOCAL_STORAGE_KEY, data.token)
+      return true
     } catch (error: any) {
       if (error.status === 401) {
         setError('Authentication failed: invalid credentials')
@@ -31,6 +32,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } finally {
       setIsLoading(false)
     }
+    return false
   }
 
   const logout = () => {
