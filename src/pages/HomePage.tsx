@@ -1,4 +1,4 @@
-import ProductsLoadingState from '@/components/products/ProductsLoadingState'
+import ProductsLoadingState from '@/components/products/loading/ProductsLoadingState'
 import ProductsView from '@/components/products/ProductsView'
 import useProducts from '@/hooks/useProducts'
 import AppLayout from '@/layouts/AppLayout'

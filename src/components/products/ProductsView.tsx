@@ -1,5 +1,5 @@
 import ProductItem from '@/components/products/ProductItem'
-import ProductsEmptyState from '@/components/products/ProductsEmptyState'
+import ProductsEmptyState from '@/components/products/empty/ProductsEmptyState'
 import type { Product } from '@/types/product'
 import { useLocation } from 'react-router-dom'
 
