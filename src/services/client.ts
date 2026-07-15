@@ -1,6 +1,6 @@
 import type { Product } from '@/types/product'
 
-const request = async (url: string, method: string = 'GET', body: any): Promise<any> => {
+const request = async (url: string, method: string = 'GET', body?: any): Promise<any> => {
   const config: RequestInit = {
     method,
   }
@@ -21,4 +21,10 @@ const request = async (url: string, method: string = 'GET', body: any): Promise<
   return await response.json()
 }
 
-export const getProducts = async (): Promise<Product[]> => await request('/products', 'GET', null)
+export const getCategories = async (): Promise<string[]> => await request('/products/categories')
+export const getProducts = async (category?: string): Promise<Product[]> => {
+  if (category) {
+    return await request(`/products/category/${category}`)
+  }
+  return await request('/products')
+}
