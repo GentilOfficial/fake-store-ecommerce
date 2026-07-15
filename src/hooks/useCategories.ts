@@ -1,5 +1,4 @@
-import { getProducts } from '@/services/client'
-import type { Product } from '@/types/product'
+import { getCategories } from '@/services/client'
 import { useEffect, useState } from 'react'
 
 const useCategories = () => {
@@ -12,16 +11,9 @@ const useCategories = () => {
       setIsLoading(true)
       setError(null)
       try {
-        const products = await getProducts()
+        const data = await getCategories()
 
-        const uniqueCategories = products.reduce((cat: string[], product: Product) => {
-          if (!cat.includes(product.category)) {
-            cat.push(product.category)
-          }
-          return cat
-        }, [] as string[])
-
-        setCategories(uniqueCategories)
+        setCategories(data)
       } catch (e) {
         console.error('Error fetching categories:', e)
         setError('An error occurred while fetching categories.')
