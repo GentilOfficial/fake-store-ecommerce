@@ -6,8 +6,14 @@ import ProductPage from './ProductPage'
 
 const addToCartMock = vi.fn()
 
+const toggleWishlistMock = vi.fn()
+
 const authMock = vi.hoisted(() => ({
   isAuthenticated: false,
+}))
+
+const wishlistMock = vi.hoisted(() => ({
+  isInWishlist: vi.fn(() => false),
 }))
 
 vi.mock('@/hooks/useProductDetail', () => ({
@@ -31,6 +37,13 @@ vi.mock('@/context/CartContext', () => ({
   }),
 }))
 
+vi.mock('@/context/WishlistContext', () => ({
+  useWishlist: () => ({
+    isInWishlist: wishlistMock.isInWishlist,
+    toggleWishlist: toggleWishlistMock,
+  }),
+}))
+
 vi.mock('@/context/AuthContext', () => ({
   useAuth: () => authMock,
 }))
@@ -38,7 +51,10 @@ vi.mock('@/context/AuthContext', () => ({
 describe('ProductPage authentication', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+
     authMock.isAuthenticated = false
+
+    wishlistMock.isInWishlist.mockReturnValue(false)
   })
 
   const renderProductPage = () =>
@@ -66,6 +82,22 @@ describe('ProductPage authentication', () => {
     expect(addToCartMock).not.toHaveBeenCalled()
   })
 
+  it('blocks guests from adding products to wishlist', () => {
+    authMock.isAuthenticated = false
+
+    renderProductPage()
+
+    const wishlistButton = screen.getByRole('button', {
+      name: /add to wishlist/i,
+    })
+
+    expect(wishlistButton).toBeDisabled()
+
+    fireEvent.click(wishlistButton)
+
+    expect(toggleWishlistMock).not.toHaveBeenCalled()
+  })
+
   it('allows authenticated users to add products', () => {
     authMock.isAuthenticated = true
 
@@ -84,5 +116,39 @@ describe('ProductPage authentication', () => {
         title: 'Test Product',
       }),
     )
+  })
+
+  it('allows authenticated users to add products to wishlist', () => {
+    authMock.isAuthenticated = true
+
+    renderProductPage()
+
+    const wishlistButton = screen.getByRole('button', {
+      name: /add to wishlist/i,
+    })
+
+    expect(wishlistButton).not.toBeDisabled()
+
+    fireEvent.click(wishlistButton)
+
+    expect(toggleWishlistMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: 'Test Product',
+      }),
+    )
+  })
+
+  it('shows remove wishlist state when product is already in wishlist', () => {
+    authMock.isAuthenticated = true
+
+    wishlistMock.isInWishlist.mockReturnValue(true)
+
+    renderProductPage()
+
+    expect(
+      screen.getByRole('button', {
+        name: /remove from wishlist/i,
+      }),
+    ).toBeInTheDocument()
   })
 })

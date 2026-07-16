@@ -1,11 +1,12 @@
 import { Button } from '@/components/ui/button'
+import { SheetClose } from '@/components/ui/sheet'
 import { Spinner } from '@/components/ui/spinner'
-import { CURRENCY } from '@/constants/currency'
 import type { Product } from '@/types/product'
-import { Trash2 } from 'lucide-react'
+import { HeartCrack } from 'lucide-react'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
-const CartItem = ({ item, handleRemoveAction }: { item: Product; handleRemoveAction: () => void }) => {
+const WishlistItem = ({ item, handleRemoveAction }: { item: Product; handleRemoveAction: () => void }) => {
   const [isRemoving, setIsRemoving] = useState(false)
   const [isImageLoaded, setIsImageLoaded] = useState(false)
 
@@ -48,9 +49,11 @@ const CartItem = ({ item, handleRemoveAction }: { item: Product; handleRemoveAct
         </div>
         <div className="min-w-0 flex-1">
           <p className="line-clamp-2 font-medium">{item.title}</p>
-          <p className="mt-2 text-lg font-bold">
-            {CURRENCY} {item.price.toFixed(2)}
-          </p>
+          <SheetClose asChild>
+            <Button variant="link" asChild className="p-0">
+              <Link to={`/product/${item.id}`}>View product</Link>
+            </Button>
+          </SheetClose>
         </div>
         <Button
           variant="ghost"
@@ -58,13 +61,13 @@ const CartItem = ({ item, handleRemoveAction }: { item: Product; handleRemoveAct
           disabled={isRemoving}
           className="text-destructive hover:bg-destructive/10"
           onClick={handleRemove}
-          aria-label={`Remove ${item.title} from cart`}
+          aria-label={`Remove ${item.title} from wishlist`}
         >
-          <Trash2 className="size-4" />
+          <HeartCrack className="size-4" />
         </Button>
       </article>
     </div>
   )
 }
 
-export default CartItem
+export default WishlistItem
