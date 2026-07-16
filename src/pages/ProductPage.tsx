@@ -1,6 +1,6 @@
 import ProductDetailEmptyState from '@/components/products/empty/ProductDetailEmptyState'
 import ProductDetailLoadingState from '@/components/products/loading/ProductDetailLoadingState'
-import ProductImageLoadingState from '@/components/products/loading/ProductImageLoadingState'
+import ProductImage from '@/components/products/ProductImage'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { CURRENCY } from '@/constants/currency'
@@ -10,13 +10,12 @@ import { useWishlist } from '@/context/WishlistContext'
 import useProductDetail from '@/hooks/useProductDetail'
 import AppLayout from '@/layouts/AppLayout'
 import { AlertCircle, ArrowLeft, Check, HeartCrack, HeartPlus, ShoppingBasket } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 const ProductPage = () => {
   const { productId } = useParams<{ productId: string }>()
   const { product, isLoading, error } = useProductDetail(productId)
-  const [isImageLoading, setIsImageLoading] = useState(true)
   const [isAddedToCart, setIsAddedToCart] = useState(false)
   const { isAuthenticated } = useAuth()
   const { addToCart } = useCart()
@@ -28,10 +27,6 @@ const ProductPage = () => {
     if (!product || !isAuthenticated) return
     toggleWishlist(product)
   }
-
-  useEffect(() => {
-    setIsImageLoading(true)
-  }, [productId])
 
   const handleAddToCart = () => {
     if (!product || !isAuthenticated) return
@@ -71,18 +66,7 @@ const ProductPage = () => {
       <article className="mx-auto grid w-full max-w-6xl animate-in fade-in-0 zoom-in-95 gap-8 px-4 py-6 duration-500 md:grid-cols-2">
         <div className="relative animate-in rounded-3xl bg-primary/5 p-6 duration-500">
           <div className="relative h-80 md:h-96">
-            {isImageLoading && <ProductImageLoadingState />}
-            <img
-              src={product.image}
-              alt={product.title}
-              loading="lazy"
-              decoding="async"
-              onLoad={() => setIsImageLoading(false)}
-              onError={() => setIsImageLoading(false)}
-              className={`h-full w-full object-contain transition-opacity duration-500 ${
-                isImageLoading ? 'opacity-0' : 'opacity-100'
-              }`}
-            />
+            <ProductImage product={product} />
           </div>
         </div>
 

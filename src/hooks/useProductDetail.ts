@@ -7,13 +7,11 @@ const useProductDetail = (productId?: string) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    const parsedProductId = Number(productId)
+  const parsedProductId = Number(productId)
+  const isValidProductId = productId !== undefined && !Number.isNaN(parsedProductId)
 
-    if (!productId || Number.isNaN(parsedProductId)) {
-      setError('Product not found.')
-      setProduct(null)
-      setIsLoading(false)
+  useEffect(() => {
+    if (!isValidProductId) {
       return
     }
 
@@ -27,15 +25,20 @@ const useProductDetail = (productId?: string) => {
       } catch (e) {
         console.error('Error fetching product:', e)
         setError('An error occurred while fetching this product.')
+        setProduct(null)
       } finally {
         setIsLoading(false)
       }
     }
 
     fetchProduct()
-  }, [productId])
+  }, [parsedProductId, isValidProductId])
 
-  return { product, isLoading, error }
+  return {
+    product,
+    isLoading,
+    error: isValidProductId ? error : 'Product not found.',
+  }
 }
 
 export default useProductDetail
