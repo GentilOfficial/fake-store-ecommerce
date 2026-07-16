@@ -1,6 +1,7 @@
 import GlobalNetworkErrorProvider from '@/components/provider/GlobalNetworkErrorProvider.tsx'
 import AuthProvider from '@/providers/AuthProvider.tsx'
 import CartProvider from '@/providers/CartProvider.tsx'
+import WishlistProvider from '@/providers/WishlistProvider.tsx'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
@@ -13,7 +14,9 @@ createRoot(document.getElementById('root')!).render(
       <GlobalNetworkErrorProvider>
         <AuthProvider>
           <CartProvider>
-            <App />
+            <WishlistProvider>
+              <App />
+            </WishlistProvider>
           </CartProvider>
         </AuthProvider>
       </GlobalNetworkErrorProvider>
