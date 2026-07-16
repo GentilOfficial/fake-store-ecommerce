@@ -13,9 +13,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/category/:category" element={<HomePage />} />
-        <Route element={<ProtectedRoute />}>
-          <Route path="/product/:productId" element={<ProductPage />} />
-        </Route>
+        <Route path="/product/:productId" element={<ProductPage />} />
         <Route element={<ProtectedRoute authenticated={false} />}>
           <Route path="/login" element={<LoginPage />} />
         </Route>

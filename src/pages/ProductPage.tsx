@@ -4,10 +4,11 @@ import ProductImageLoadingState from '@/components/products/loading/ProductImage
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { CURRENCY } from '@/constants/currency'
+import { useAuth } from '@/context/AuthContext'
 import { useCart } from '@/context/CartContext'
 import useProductDetail from '@/hooks/useProductDetail'
 import AppLayout from '@/layouts/AppLayout'
-import { ArrowLeft, Check, ShoppingBasket } from 'lucide-react'
+import { AlertCircle, ArrowLeft, Check, ShoppingBasket } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
@@ -17,13 +18,14 @@ const ProductPage = () => {
   const [isImageLoading, setIsImageLoading] = useState(true)
   const [isAddedToCart, setIsAddedToCart] = useState(false)
   const { addToCart } = useCart()
+  const { isAuthenticated } = useAuth()
 
   useEffect(() => {
     setIsImageLoading(true)
   }, [productId])
 
   const handleAddToCart = () => {
-    if (!product) return
+    if (!product || !isAuthenticated) return
 
     addToCart(product)
     setIsAddedToCart(true)
@@ -83,7 +85,14 @@ const ProductPage = () => {
           </p>
           <p className="text-base leading-relaxed text-muted-foreground">{product.description}</p>
 
-          <Button className="mt-2 w-fit" onClick={handleAddToCart} disabled={isAddedToCart}>
+          {!isAuthenticated && (
+            <p className="text-sm text-destructive flex items-center gap-2">
+              <AlertCircle className="size-4" />
+              <span>You must be logged in to add items to the cart.</span>
+            </p>
+          )}
+
+          <Button className="mt-2 w-fit" onClick={handleAddToCart} disabled={isAddedToCart || !isAuthenticated}>
             {isAddedToCart ? (
               <>
                 <Check className="size-4" />
