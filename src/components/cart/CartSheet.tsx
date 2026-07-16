@@ -16,7 +16,7 @@ import { useCart } from '@/context/CartContext'
 import { ShoppingCart } from 'lucide-react'
 import CartItem from './CartItem'
 
-const CartItems = () => {
+const CartSheet = () => {
   const { cart, removeFromCart, clearCart } = useCart()
 
   return (
@@ -78,4 +78,4 @@ const CartItems = () => {
   )
 }
 
-export default CartItems
+export default CartSheet
