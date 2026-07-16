@@ -5,7 +5,6 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from '@/components/ui/navigation-menu'
-import { Spinner } from '@/components/ui/spinner'
 import { cn } from '@/lib/utils'
 import { Link, useLocation } from 'react-router-dom'
 
@@ -22,8 +21,6 @@ const NavLinkList = ({ categories, isLoading, error, listClassName, onSelect }: 
 
   const isRoot = location.pathname === '/'
 
-  if (isLoading) return <Spinner className="mx-auto" />
-
   if (error) return <div>Error: {error}</div>
 
   return (
@@ -38,21 +35,30 @@ const NavLinkList = ({ categories, isLoading, error, listClassName, onSelect }: 
             </Button>
           </NavigationMenuLink>
         </NavigationMenuItem>
-        {categories.map((category, i) => (
-          <NavigationMenuItem key={`category-${category}-${i}`}>
-            <NavigationMenuLink asChild>
-              <Button
-                asChild
-                variant={location.pathname === `/category/${encodeURIComponent(category)}` ? 'secondary' : 'link'}
-                className="capitalize whitespace-nowrap"
-              >
-                <Link to={`/category/${encodeURIComponent(category)}`} onClick={onSelect}>
-                  {category}
-                </Link>
-              </Button>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-        ))}
+        {isLoading &&
+          Array.from({ length: 4 }).map((_, i) => (
+            <NavigationMenuItem key={`loading-${i}`}>
+              <NavigationMenuLink asChild>
+                <div className="h-4 w-20 rounded-full animate-pulse bg-primary/10"></div>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          ))}
+        {!isLoading &&
+          categories.map((category, i) => (
+            <NavigationMenuItem key={`category-${category}-${i}`}>
+              <NavigationMenuLink asChild>
+                <Button
+                  asChild
+                  variant={location.pathname === `/category/${encodeURIComponent(category)}` ? 'secondary' : 'link'}
+                  className="capitalize whitespace-nowrap"
+                >
+                  <Link to={`/category/${encodeURIComponent(category)}`} onClick={onSelect}>
+                    {category}
+                  </Link>
+                </Button>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          ))}
       </NavigationMenuList>
     </NavigationMenu>
   )
