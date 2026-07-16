@@ -5,7 +5,7 @@ import { useAuth } from '@/context/AuthContext'
 import useCategories from '@/hooks/useCategories'
 import { Menu, X } from 'lucide-react'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Navbar = () => {
   const { isAuthenticated, logout } = useAuth()
@@ -29,7 +29,9 @@ const Navbar = () => {
   return (
     <header className="relative border-b border-border px-4 py-3 md:px-6">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3">
-        <h1 className="text-xl font-bold md:text-2xl">Fake Store</h1>
+        <Link to="/">
+          <h1 className="text-xl font-bold md:text-2xl">Fake Store</h1>
+        </Link>
         <div className="hidden md:block ms-auto">
           <NavLinkList categories={categories} isLoading={isLoading} error={error} />
         </div>
