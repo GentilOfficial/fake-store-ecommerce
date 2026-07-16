@@ -1,12 +1,11 @@
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { CURRENCY } from '@/constants/currency'
 import { cn } from '@/lib/utils'
 import type { Product } from '@/types/product'
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-
-const CURRENCY: string = 'EUR'
 
 const ProductItem = ({ product, index }: { product: Product; index: number }) => {
   const [isImageLoading, setIsImageLoading] = useState(true)
