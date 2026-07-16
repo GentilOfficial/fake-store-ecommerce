@@ -3,21 +3,35 @@ import ProductDetailLoadingState from '@/components/products/loading/ProductDeta
 import ProductImageLoadingState from '@/components/products/loading/ProductImageLoadingState'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { CURRENCY } from '@/constants/currency'
+import { useCart } from '@/context/CartContext'
 import useProductDetail from '@/hooks/useProductDetail'
 import AppLayout from '@/layouts/AppLayout'
+import { ArrowLeft, Check, ShoppingBasket } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-
-const CURRENCY = 'EUR'
 
 const ProductPage = () => {
   const { productId } = useParams<{ productId: string }>()
   const { product, isLoading, error } = useProductDetail(productId)
   const [isImageLoading, setIsImageLoading] = useState(true)
+  const [isAddedToCart, setIsAddedToCart] = useState(false)
+  const { addToCart } = useCart()
 
   useEffect(() => {
     setIsImageLoading(true)
   }, [productId])
+
+  const handleAddToCart = () => {
+    if (!product) return
+
+    addToCart(product)
+    setIsAddedToCart(true)
+
+    setTimeout(() => {
+      setIsAddedToCart(false)
+    }, 2000)
+  }
 
   if (isLoading) {
     return (
@@ -37,7 +51,13 @@ const ProductPage = () => {
 
   return (
     <AppLayout>
-      <article className="mx-auto grid w-full max-w-6xl animate-in fade-in-0 zoom-in-95 gap-8 px-4 py-12 duration-500 md:grid-cols-2">
+      <Button asChild className="mt-2 w-fit" variant="link">
+        <Link to="/">
+          <ArrowLeft className="size-4" />
+          <span>Back to products</span>
+        </Link>
+      </Button>
+      <article className="mx-auto grid w-full max-w-6xl animate-in fade-in-0 zoom-in-95 gap-8 px-4 py-6 duration-500 md:grid-cols-2">
         <div className="relative animate-in rounded-3xl bg-primary/5 p-6 duration-500">
           <div className="relative h-80 md:h-96">
             {isImageLoading && <ProductImageLoadingState />}
@@ -63,8 +83,18 @@ const ProductPage = () => {
           </p>
           <p className="text-base leading-relaxed text-muted-foreground">{product.description}</p>
 
-          <Button asChild className="mt-2 w-fit">
-            <Link to="/">Back to products</Link>
+          <Button className="mt-2 w-fit" onClick={handleAddToCart} disabled={isAddedToCart}>
+            {isAddedToCart ? (
+              <>
+                <Check className="size-4" />
+                <span>Added to Cart</span>
+              </>
+            ) : (
+              <>
+                <ShoppingBasket className="size-4" />
+                <span>Add to Cart</span>
+              </>
+            )}
           </Button>
         </div>
       </article>
