@@ -1,5 +1,6 @@
 import { AuthContext } from '@/context/AuthContext'
 import { login as loginService } from '@/services/client'
+import type { ApiError } from '@/types/api'
 import { useState } from 'react'
 
 const LOCAL_STORAGE_KEY = 'authToken'
@@ -23,8 +24,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setToken(data.token)
       localStorage.setItem(LOCAL_STORAGE_KEY, data.token)
       return true
-    } catch (error: any) {
-      if (error.status === 401) {
+    } catch (error) {
+      const apiError = error as ApiError
+      if (apiError.status === 401) {
         setError('Authentication failed: invalid credentials')
       } else {
         setError('An error occurred during login. Please try again later.')

@@ -1,7 +1,8 @@
 import { emitNetworkError } from '@/lib/network-error'
+import type { ApiError } from '@/types/api'
 import type { Product } from '@/types/product'
 
-const request = async (url: string, method: string = 'GET', body?: any): Promise<any> => {
+const request = async <T>(url: string, method: string = 'GET', body?: unknown): Promise<T> => {
   const config: RequestInit = {
     method,
   }
@@ -24,25 +25,20 @@ const request = async (url: string, method: string = 'GET', body?: any): Promise
       throw error
     }
 
-    return await response.json()
-  } catch (error: any) {
-    if (error.status === undefined) {
+    return (await response.json()) as T
+  } catch (error) {
+    const apiError = error as ApiError
+    if (apiError.status === undefined) {
       emitNetworkError('Network error')
     }
 
-    throw error
+    throw apiError
   }
 }
 
-export const getCategories = async (): Promise<string[]> => await request('/products/categories')
-export const getProducts = async (category?: string): Promise<Product[]> => {
-  if (category) {
-    return await request(`/products/category/${category}`)
-  }
-  return await request('/products')
-}
-export const getProductById = async (productId: number): Promise<Product> => await request(`/products/${productId}`)
-export const login = async (username: string, password: string): Promise<any> => {
-  const body = { username, password }
-  return await request('/auth/login', 'POST', body)
-}
+export const getCategories = () => request<string[]>('/products/categories')
+export const getProducts = (category?: string) =>
+  category ? request<Product[]>(`/products/category/${category}`) : request<Product[]>('/products')
+export const getProductById = (productId: number) => request<Product>(`/products/${productId}`)
+export const login = (username: string, password: string) =>
+  request<{ token: string }>('/auth/login', 'POST', { username, password })
