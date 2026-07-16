@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button'
+import { Spinner } from '@/components/ui/spinner'
 import { CURRENCY } from '@/constants/currency'
 import type { Product } from '@/types/product'
 import { Trash2 } from 'lucide-react'
 import { useState } from 'react'
-import { Spinner } from '../ui/spinner'
 
 const CartItem = ({ item, handleRemoveAction }: { item: Product; handleRemoveAction: () => void }) => {
   const [isRemoving, setIsRemoving] = useState(false)
