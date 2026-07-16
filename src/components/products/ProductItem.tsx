@@ -2,8 +2,11 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { CURRENCY } from '@/constants/currency'
+import { useAuth } from '@/context/AuthContext'
+import { useWishlist } from '@/context/WishlistContext'
 import { cn } from '@/lib/utils'
 import type { Product } from '@/types/product'
+import { HeartCrack, HeartPlus } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -11,6 +14,13 @@ const ProductItem = ({ product, index }: { product: Product; index: number }) =>
   const [isImageLoading, setIsImageLoading] = useState(true)
   const [isVisible, setIsVisible] = useState(false)
   const cardRef = useRef<HTMLElement | null>(null)
+  const { isAuthenticated } = useAuth()
+  const { isInWishlist, toggleWishlist } = useWishlist()
+
+  const handleWishlistToggle = () => {
+    if (!isAuthenticated) return
+    toggleWishlist(product)
+  }
 
   useEffect(() => {
     const currentCard = cardRef.current
@@ -47,9 +57,19 @@ const ProductItem = ({ product, index }: { product: Product; index: number }) =>
       <Card className="relative mx-auto h-full w-full max-w-sm pt-0 transition-transform duration-300 hover:-translate-y-1">
         <div className="relative w-full">
           {isImageLoading && <div className="absolute inset-x-0 top-0 z-30 aspect-video animate-pulse bg-primary/10" />}
-          <Badge variant="secondary" className="absolute top-5 right-5 z-40">
+          <Badge variant="secondary" className="absolute top-5 left-5 z-40">
             {product.category}
           </Badge>
+          <Button
+            variant={isInWishlist(product.id) ? 'destructive' : 'secondary'}
+            size="icon"
+            aria-label={isInWishlist(product.id) ? 'Remove from wishlist' : 'Add to wishlist'}
+            className="absolute top-5 right-5 z-40"
+            onClick={handleWishlistToggle}
+            disabled={!isAuthenticated}
+          >
+            {isInWishlist(product.id) ? <HeartCrack /> : <HeartPlus />}
+          </Button>
           <img
             src={product.image}
             alt={product.title}

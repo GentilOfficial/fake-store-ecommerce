@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button'
 import { CURRENCY } from '@/constants/currency'
 import { useAuth } from '@/context/AuthContext'
 import { useCart } from '@/context/CartContext'
+import { useWishlist } from '@/context/WishlistContext'
 import useProductDetail from '@/hooks/useProductDetail'
 import AppLayout from '@/layouts/AppLayout'
-import { AlertCircle, ArrowLeft, Check, ShoppingBasket } from 'lucide-react'
+import { AlertCircle, ArrowLeft, Check, HeartCrack, HeartPlus, ShoppingBasket } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
@@ -17,8 +18,16 @@ const ProductPage = () => {
   const { product, isLoading, error } = useProductDetail(productId)
   const [isImageLoading, setIsImageLoading] = useState(true)
   const [isAddedToCart, setIsAddedToCart] = useState(false)
-  const { addToCart } = useCart()
   const { isAuthenticated } = useAuth()
+  const { addToCart } = useCart()
+  const { isInWishlist, toggleWishlist } = useWishlist()
+
+  const productInWishlist = product ? isInWishlist(product.id) : false
+
+  const handleWishlistToggle = () => {
+    if (!product || !isAuthenticated) return
+    toggleWishlist(product)
+  }
 
   useEffect(() => {
     setIsImageLoading(true)
@@ -78,7 +87,18 @@ const ProductPage = () => {
         </div>
 
         <div className="flex animate-in flex-col gap-5 delay-100 duration-500">
-          <Badge variant="secondary">{product.category}</Badge>
+          <div className="flex items-center justify-between gap-2">
+            <Badge variant="secondary">{product.category}</Badge>
+            <Button
+              variant={productInWishlist ? 'destructive' : 'secondary'}
+              size="icon"
+              aria-label={productInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+              onClick={handleWishlistToggle}
+              disabled={!isAuthenticated}
+            >
+              {productInWishlist ? <HeartCrack /> : <HeartPlus />}
+            </Button>
+          </div>
           <h1 className="text-2xl font-semibold leading-tight md:text-3xl">{product.title}</h1>
           <p className="text-3xl font-bold">
             {CURRENCY} {product.price.toFixed(2)}
@@ -88,7 +108,7 @@ const ProductPage = () => {
           {!isAuthenticated && (
             <p className="text-sm text-destructive flex items-center gap-2">
               <AlertCircle className="size-4" />
-              <span>You must be logged in to add items to the cart.</span>
+              <span>You must be logged in to add items to the cart/wishlist.</span>
             </p>
           )}
 
