@@ -2,6 +2,7 @@ import NavLinkList from '@/components/navbar/menu/NavLinkList'
 import Profile from '@/components/navbar/menu/Profile'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/context/AuthContext'
+import { useCart } from '@/context/CartContext'
 import useCategories from '@/hooks/useCategories'
 import { Menu, X } from 'lucide-react'
 import { useState } from 'react'
@@ -11,6 +12,7 @@ const Navbar = () => {
   const { isAuthenticated, logout } = useAuth()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { categories, isLoading, error } = useCategories()
+  const { clearCart } = useCart()
   const navigate = useNavigate()
 
   const toggleMobileMenu = () => {
@@ -23,6 +25,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout()
+    clearCart()
     navigate('/login', { replace: true })
   }
 
