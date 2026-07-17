@@ -1,5 +1,5 @@
 import { emitNetworkError } from '@/lib/network-error'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import GlobalNetworkErrorProvider from './GlobalNetworkErrorProvider'
 
@@ -13,7 +13,9 @@ describe('GlobalNetworkErrorProvider', () => {
 
     expect(screen.queryByText('Something went wrong')).not.toBeInTheDocument()
 
-    emitNetworkError('Network error')
+    act(() => {
+      emitNetworkError('Network error')
+    })
 
     expect(await screen.findByText('Something went wrong')).toBeInTheDocument()
   })
@@ -25,7 +27,10 @@ describe('GlobalNetworkErrorProvider', () => {
       </GlobalNetworkErrorProvider>,
     )
 
-    emitNetworkError('Network error')
+    act(() => {
+      emitNetworkError('Network error')
+    })
+
     await screen.findByText('Something went wrong')
 
     fireEvent.click(screen.getByRole('button', { name: /dismiss/i }))
