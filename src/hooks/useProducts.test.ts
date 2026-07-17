@@ -32,11 +32,15 @@ describe('useProducts', () => {
   })
 
   it('sets an error when the fetch fails', async () => {
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
     vi.mocked(client.getProducts).mockRejectedValue(new Error('fail'))
 
     const { result } = renderHook(() => useProducts())
 
     await waitFor(() => expect(result.current.error).toBe('An error occurred while fetching products.'))
+
+    errorSpy.mockRestore()
   })
 
   it('refetches when the category changes', async () => {

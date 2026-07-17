@@ -19,10 +19,14 @@ describe('useCategories', () => {
   })
 
   it('sets an error when the fetch fails', async () => {
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
     vi.mocked(client.getCategories).mockRejectedValue(new Error('fail'))
 
     const { result } = renderHook(() => useCategories())
 
     await waitFor(() => expect(result.current.error).toBe('An error occurred while fetching categories.'))
+
+    errorSpy.mockRestore()
   })
 })
