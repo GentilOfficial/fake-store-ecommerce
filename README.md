@@ -7,6 +7,24 @@
 
 A responsive single-page e-commerce application built with React and TypeScript, powered by the [Fake Store API](https://fakestoreapi.com/docs).
 
+## Table of Contents
+
+- [Features](#features)
+- [Screenshots](#screenshots)
+  - [Home](#home)
+  - [Product Details](#product-details)
+  - [Cart & Wishlist](#cart--wishlist)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+  - [Requirements](#requirements)
+  - [Installation](#installation)
+  - [Local Development](#local-development)
+  - [Demo Credentials](#demo-credentials)
+- [Testing](#testing)
+- [Project Structure](#project-structure)
+- [AI Usage](#ai-usage)
+- [Author](#author)
+
 ## Features
 
 - **Product catalog**: grid of products fetched from the API. Each card shows image, title and price.
