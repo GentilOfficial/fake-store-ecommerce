@@ -1,75 +1,165 @@
-# React + TypeScript + Vite
+# Fake Store — E-commerce
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/docs)
+[![shadcn/ui](https://img.shields.io/badge/shadcn/ui-Radix-000000)](https://ui.shadcn.com/docs)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/docs/)
 
-Currently, two official plugins are available:
+A responsive single-page e-commerce application built with React and TypeScript, powered by the [Fake Store API](https://fakestoreapi.com/docs).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Table of Contents
 
-## React Compiler
+- [Features](#features)
+- [Screenshots](#screenshots)
+  - [Home](#home)
+  - [Product Details](#product-details)
+  - [Cart & Wishlist](#cart--wishlist)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+  - [Requirements](#requirements)
+  - [Installation](#installation)
+  - [Local Development](#local-development)
+  - [Demo Credentials](#demo-credentials)
+- [Testing](#testing)
+- [Project Structure](#project-structure)
+- [AI Usage](#ai-usage)
+- [Author](#author)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+- **Product catalog**: grid of products fetched from the API. Each card shows image, title and price.
+- **Category filtering**: filter products by category from the header navigation. The selected category is reflected in the URL (`/category/:category`) and restored on a direct link or page refresh.
+- **Product details**: dedicated product page displaying image, title, price, and description, accessible via its own URL (`/product/:productId`).
+- **Authentication**: login/logout against the Fake Store API's `/auth/login` endpoint, with the session token persisted in `localStorage`.
+- **Shopping cart**: authenticated users can add products to a cart, with a live counter and side-panel summary.
+- **Wishlist**: authenticated users can save and remove favorite products, with its own side-panel summary.
+- **Theme switching**: light and dark mode support.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Screenshots
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Home
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+| Guest                          | Authenticated                 |
+| ------------------------------ | ----------------------------- |
+| ![](docs/home-guest-light.png) | ![](docs/home-auth-light.png) |
+| ![](docs/home-guest-dark.png)  | ![](docs/home-auth-dark.png)  |
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Product Details
 
+| Guest                             | Authenticated                    |
+| --------------------------------- | -------------------------------- |
+| ![](docs/product-guest-light.png) | ![](docs/product-auth-light.png) |
+| ![](docs/product-guest-dark.png)  | ![](docs/product-auth-dark.png)  |
+
+### Cart & Wishlist
+
+| Cart                     | Wishlist                     |
+| ------------------------ | ---------------------------- |
+| ![](docs/cart-light.png) | ![](docs/wishlist-light.png) |
+| ![](docs/cart-dark.png)  | ![](docs/wishlist-dark.png)  |
+
+## Tech Stack
+
+|            |                                                 |
+| ---------- | ----------------------------------------------- |
+| Framework  | React 19 + TypeScript                           |
+| Build tool | Vite 8                                          |
+| Routing    | React Router 7                                  |
+| Styling    | Tailwind CSS 4 + shadcn/ui (Radix primitives)   |
+| Testing    | Vitest + React Testing Library                  |
+| API        | [Fake Store API](https://fakestoreapi.com/docs) |
+
+## Getting Started
+
+### Requirements
+
+- Node.js 22
+- npm
+
+### Installation
+
+```bash
+git clone https://github.com/GentilOfficial/fake-store-ecommerce.git
+cd fake-store-ecommerce
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Local Development
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+npm run dev
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+The app will be available at the local URL printed in the terminal (typically `http://localhost:5173`).
+
+### Demo credentials
+
+Cart and Wishlist features require authentication.
+
+The Fake Store API provides public demo users. For example:
 
 ```
+Username: johnd
+Password: m38rmF$
+```
+
+Any user listed at [fakestoreapi.com/users](https://fakestoreapi.com/users) can be used with its corresponding credentials.
+
+## Testing
+
+Unit tests cover both logic and UI:
+
+- **API layer**
+  - `services/client.ts`
+- **Custom Hooks**
+  - `useProducts`
+  - `useProductDetail`
+  - `useCategories`
+- **Context providers**
+  - `AuthProvider`
+  - `CartProvider`
+  - `WishlistProvider`
+- **Components**
+  - `GlobalNetworkErrorProvider`
+  - `ProtectedRoute`
+  - `ProductPage`
+  - `CartItem`
+  - `CartSheet`
+
+Run the test suite with:
+
+```bash
+npm test
+```
+
+Tests are also executed automatically on every push and pull request through GitHub Actions, which additionally verifies the production build.
+
+## Project Structure
+
+```
+src/
+├── components/    # Reusable UI components
+├── constants/     # Application constants
+├── context/       # React context definitions
+├── hooks/         # Custom hooks
+├── layouts/       # Shared layouts
+├── lib/           # Utilities
+├── pages/         # Route-level pages
+├── providers/     # Context providers
+├── services/      # Fake Store API client
+├── test/          # Test configuration
+└── types/         # Shared TypeScript types
+```
+
+## AI Usage
+
+AI was used as a development support tool for:
+
+- **Planning**: translating the requirements into an implementation roadmap.
+- **Code review**: validating the implementation against the acceptance criteria and identifying issues.
+- **Debugging**: assisting with development and testing issues.
+
+## Author
+
+**Federico Gentili**
+GitHub: [@GentilOfficial](https://github.com/GentilOfficial)
