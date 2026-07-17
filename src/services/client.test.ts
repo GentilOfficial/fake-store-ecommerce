@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { getProducts } from './client'
+import { getProducts, login } from './client'
 
 describe('getProducts', () => {
   beforeEach(() => {
@@ -47,5 +47,23 @@ describe('getProducts', () => {
     const request = getProducts()
 
     await expect(request).rejects.toThrow('Internal Server Error')
+  })
+})
+
+describe('login', () => {
+  it('posts credentials and returns a token', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ token: 'abc123' }),
+    }) as any
+
+    const result = await login('test-user', 'P@ssw0rd!')
+
+    expect(fetch).toHaveBeenCalledWith(
+      'https://fakestoreapi.com/auth/login',
+      expect.objectContaining({ method: 'POST' }),
+    )
+
+    expect(result).toEqual({ token: 'abc123' })
   })
 })
